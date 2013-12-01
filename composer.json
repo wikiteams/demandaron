@@ -3,6 +3,7 @@
     "description": "description_text",
     "minimum-stability": "dev",
     "require": {
-        "silex/silex": "~1.1"
+        "silex/silex": "~1.1",
+        "doctrine/dbal": "2.2.*"
     }
 }
