@@ -23,4 +23,4 @@ CREATE  TABLE "main"."answers_tags" (
   "tag_id" INTEGER NOT NULL
 );
 
-CREATE UNIQUE INDEX "main"."idx_answers_tags" ON "answers_tags" ("answer_id" ASC, "tag_id" ASC)
+CREATE UNIQUE INDEX "main"."idx_answers_tags" ON "answers_tags" ("answer_id" ASC, "tag_id" ASC);

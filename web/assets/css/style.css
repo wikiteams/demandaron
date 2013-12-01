@@ -51,7 +51,9 @@ textarea, input {
 }
 
 #tag-list li span {
-    float: right;
+    float: left;
+    margin-right: 10px;
+    height: 40px;
 }
 
 #tag-list li.selected {
