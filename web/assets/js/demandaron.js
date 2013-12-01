@@ -35,14 +35,16 @@ $(function() {
         tagName: 'li',
         template: _.template($('#tag-template').html()),
         events: {
-            'click .tag' : 'selectTag'
+            'click' : 'selectTag'
         },
         initialize: function() {
             _.bindAll(this, 'render', 'selectTag');
 
             this.model.bind('change', this.render);
         },
-        selectTag: function() {},
+        selectTag: function() {
+            this.$el.toggleClass('selected');
+        },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             return this;

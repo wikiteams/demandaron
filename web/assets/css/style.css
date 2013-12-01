@@ -8,6 +8,11 @@
     border: 1px solid #cdcdcd;
     padding: 3px;
     margin: 3px;
+    cursor: pointer;
+}
+
+#tag-list li.selected {
+    background-color: #ffb663;
 }
 
 #tag-list li:nth-child(3n) {
