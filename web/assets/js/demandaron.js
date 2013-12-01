@@ -44,6 +44,13 @@ $(function() {
         },
         selectTag: function() {
             this.$el.toggleClass('selected');
+
+            if(this.$el.hasClass('selected')) {
+                this.$el.find('span').html('&#9745;');
+            } else {
+                this.$el.find('span').html('&#9744;');
+            }
+
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
@@ -60,6 +67,7 @@ $(function() {
             this.model.bind('change', this.render);
         },
         render: function() {
+            this.$el.val(this.model.get('id'));
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
