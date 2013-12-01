@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="1812210711">
+    <data-source source="LOCAL" name="Data Source" uuid="a249dea9-1898-4a89-91b6-adfa5d70ff2d">
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/web/app.db</jdbc-url>
+      <schema-pattern>*</schema-pattern>
+      <libraries>
+        <library>
+          <url>jar://$PROJECT_DIR$/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar!/</url>
+        </library>
+        <library>
+          <url>file://$PROJECT_DIR$/xerial-sqlite-license.txt</url>
+        </library>
+      </libraries>
+    </data-source>
+  </component>
+</project>
+

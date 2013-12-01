@@ -2,11 +2,35 @@
 <html>
 <head>
     <title>Demandaron</title>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <script src="assets/js/json2.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/underscore-min.js"></script>
     <script src="assets/js/backbone-min.js"></script>
     <script src="assets/js/demandaron.js"></script>
 </head>
 <body>
+    <script type="text/template" id="tag-template">
+        <%= name %>
+    </script>
 
+    <script type="text/template" id="language-template">
+        <%= name %>
+    </script>
+
+    <div id="demandaron">
+        <h1>Software Metrics Survey</h1>
+        <h2>
+            <p>
+               From the list below please select the language in which you are most fluent and metric/metrics which are most reliable
+               in assesing software quality.
+            </p>
+        </h2>
+        <div>
+            <label for="language">Language</label>
+            <select name="language" id="language"></select>
+        </div>
+        <ul id="tag-list"></ul>
+    </div>
 </body>
 </html>

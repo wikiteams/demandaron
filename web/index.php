@@ -13,7 +13,14 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 
 $app->get('/api/tags', function() use ($app) {
     $sql = "SELECT * from tags";
-    $tags = $app['db']->fetchAssoc($sql);
+    $tags = $app['db']->fetchAll($sql);
+
+    return $app->json($tags);
+});
+
+$app->get('/api/languages', function() use ($app) {
+    $sql = "SELECT * from languages";
+    $tags = $app['db']->fetchAll($sql);
 
     return $app->json($tags);
 });
