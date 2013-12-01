@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="assets/css/style.css"/>
     <script src="assets/js/json2.js"></script>
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.cookie.js"></script>
     <script src="assets/js/underscore-min.js"></script>
     <script src="assets/js/backbone-min.js"></script>
     <script src="assets/js/demandaron.js"></script>
@@ -27,12 +28,14 @@
             </p>
         </h2>
         <div id="language-box">
+            <span class="error"></span>
             <label for="language">Language:</label>
             <select name="language" id="language"></select>
         </div>
 
         <div id="metrics-box">
             <h3>Choose metrics below:</h3>
+            <span class="error"></span>
             <ul id="tag-list" class="clearfix"></ul>
         </div>
 
@@ -42,7 +45,12 @@
             <input type="button" value="+ Add new metric" id="add-metric-button"/>
         </div>
 
-        <button>Send Survey!</button>
+        <div id="opinion-box">
+            <h3>Your additional opinion:</h3>
+            <textarea name="opinion" id="opinion" placeholder="enter your opinion about metrics here..."></textarea>
+        </div>
+
+        <button id="send-survey-button">Send Survey!</button>
     </div>
 </body>
 </html>

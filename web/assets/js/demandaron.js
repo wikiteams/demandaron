@@ -1,4 +1,24 @@
 $(function() {
+    var Answer = Backbone.Model.extend({
+        url: 'api/answers',
+        defaults: {
+            languageId: 0,
+            tagIds: [],
+            opinion: ''
+        },
+        validate: function(attrs, options) {
+            if (attrs.tagIds.length === 0) {
+                return "empty_tag_list";
+            }
+
+            if(attrs.languageId === 0) {
+                return 'language_not_selected'
+            }
+        },
+        initialize: function() {
+        }
+    });
+
     var Tag = Backbone.Model.extend({
         defaults: {
             name: '',
@@ -53,6 +73,7 @@ $(function() {
 
         },
         render: function() {
+            this.$el.attr('rel', this.model.get('id'));
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
@@ -76,8 +97,12 @@ $(function() {
     window.AppView = Backbone.View.extend({
         el: $('#demandaron'),
 
+        events: {
+            'click #send-survey-button': 'sendSurvey'
+        },
+
         initialize: function() {
-            _.bindAll(this, 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages');
+            _.bindAll(this, 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages', 'sendSurvey');
 
             Tags.bind('add', this.addOneTag);
             Tags.bind('reset', this.addAllTags);
@@ -101,7 +126,6 @@ $(function() {
         },
 
         renderTags: function() {
-            console.log('ala ma kota');
         },
 
         addOneLanguage: function(language) {
@@ -114,9 +138,37 @@ $(function() {
         },
 
         renderLanguages: function() {
-            console.log('ala ma kota');
+        },
+
+        sendSurvey: function() {
+            var languageId = $('#language').val();
+            var choosedMetrics = $.map($('#tag-list li.selected'), function(element, index) { return $(element).attr('rel'); });
+            var opinion = $('#opinion').val();
+
+            var answer = new Answer({'languageId': languageId, 'tagIds': choosedMetrics, 'opinion': opinion});
+            answer.on('invalid', _.bind(function(model, error) {
+                this.$('.error').html('');
+
+                if(error === 'empty_tag_list') {
+                    this.$('#metrics-box .error').html('Select at least one metric');
+                }
+
+                if(error === 'language_not_selected') {
+                    this.$('#metrics-box .error').html('Select language');
+                }
+            }, this));
+            answer.save(null, {
+                'success': _.bind(function() {
+                    $.cookie('damandaron', true, { expires: 365 });
+                    this.$el.replaceWith($('<div id="demandaron"><h1>Software Metrics Survey</h1><h2>Thank you for voting!</h2></div>'));
+                }, this)
+            });
         }
     });
 
-    window.App = new AppView;
+    if($.cookie('damandaron') !== undefined) {
+        $('#demandaron').replaceWith($('<div id="demandaron"><h1>Software Metrics Survey</h1><h2>Thank you for voting!</h2></div>'));
+    } else {
+        window.App = new AppView;
+    }
 });
