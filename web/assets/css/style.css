@@ -58,10 +58,6 @@ textarea, input {
     background-color: #ffb663;
 }
 
-#tag-list li:nth-child(4n) {
-    clear: both;
-}
-
 #language-box,
 #metrics-box,
 #new-metric-box,

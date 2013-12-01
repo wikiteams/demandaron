@@ -19,12 +19,14 @@ $(function() {
         }
     });
 
-    var Tag = Backbone.Model.extend({
+    Tag = Backbone.Model.extend({
         defaults: {
             name: '',
             original: false,
             created_at: new Date()
         },
+        url: "api/tags",
+        selected: false,
         initialize: function() {
         }
     });
@@ -75,6 +77,11 @@ $(function() {
         render: function() {
             this.$el.attr('rel', this.model.get('id'));
             this.$el.html(this.template(this.model.toJSON()));
+
+            if(this.model.attributes.selected === true) {
+                this.selectTag();
+            }
+
             return this;
         }
     });
@@ -98,11 +105,12 @@ $(function() {
         el: $('#demandaron'),
 
         events: {
-            'click #send-survey-button': 'sendSurvey'
+            'click #send-survey-button': 'sendSurvey',
+            'click #add-metric-button': 'saveTag'
         },
 
         initialize: function() {
-            _.bindAll(this, 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages', 'sendSurvey');
+            _.bindAll(this, 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages', 'sendSurvey', 'saveTag');
 
             Tags.bind('add', this.addOneTag);
             Tags.bind('reset', this.addAllTags);
@@ -114,6 +122,18 @@ $(function() {
 
             Tags.fetch();
             Languages.fetch();
+        },
+
+        saveTag: function() {
+            var metricName = this.$el.find('#metric-name').val();
+
+            var tag = new Tag({'selected': true, 'name': metricName});
+            tag.save(null, {
+                'success': function() {
+                    Tags.add(tag);
+                    $('#metric-name').val('');
+                }
+            });
         },
 
         addOneTag: function(tag) {

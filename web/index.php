@@ -15,10 +15,39 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 ));
 
 $app->get('/api/tags', function() use ($app) {
-    $sql = "SELECT * from tags";
+    $sql = "SELECT id, name, count(at.tag_id) as counter FROM tags t
+            LEFT JOIN answers_tags at ON (t.id = at.tag_id)
+            GROUP BY name
+            ORDER BY counter DESC, name ASC";
+
     $tags = $app['db']->fetchAll($sql);
 
     return $app->json($tags);
+});
+
+$app->post('/api/tags', function(Request $request) use ($app) {
+    $data = json_decode($request->getContent(), true);
+
+    $sql = "INSERT INTO tags (name) VALUES(:name)";
+    $stmt = $app['db']->prepare($sql);
+    $stmt->bindValue(':name', $data['name'], PDO::PARAM_STR);
+
+    $result = $stmt->execute();
+
+    $tagId = $app['db']->lastInsertId();
+
+    if($result) {
+        $response = array(
+            'status' => 'ok',
+            'id' => $tagId,
+        );
+    } else {
+        $response = array(
+            'status' => 'error',
+        );
+    }
+
+    return $app->json($response);
 });
 
 $app->get('/api/languages', function() use ($app) {
