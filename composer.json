@@ -1,0 +1,8 @@
+{
+    "name": "wikiteams/demandaron",
+    "description": "description_text",
+    "minimum-stability": "dev",
+    "require": {
+        "silex/silex": "~1.1"
+    }
+}
