@@ -26,11 +26,21 @@
                in assesing software quality.
             </p>
         </h2>
-        <div>
-            <label for="language">Language</label>
+        <div id="language-box">
+            <label for="language">Language:</label>
             <select name="language" id="language"></select>
         </div>
-        <ul id="tag-list"></ul>
+
+        <div id="metrics-box">
+            <h3>Choose metrics below:</h3>
+            <ul id="tag-list" class="clearfix"></ul>
+        </div>
+
+        <div id="new-metric-box">
+            <h3>... or add new metric</h3>
+            <input type="text" placeholder="enter metric name here..." />
+            <input type="button" value="+ Add new metric" id="add-metric-button"/>
+        </div>
     </div>
 </body>
 </html>

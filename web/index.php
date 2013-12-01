@@ -19,7 +19,7 @@ $app->get('/api/tags', function() use ($app) {
 });
 
 $app->get('/api/languages', function() use ($app) {
-    $sql = "SELECT * from languages";
+    $sql = "SELECT * from languages ORDER BY name ASC";
     $tags = $app['db']->fetchAll($sql);
 
     return $app->json($tags);

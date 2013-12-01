@@ -1,3 +1,25 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+#demandaron {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1000px;
+}
+
+.clearfix:after {
+    display: table;
+    clear: both;
+    content: "";
+}
+
 #tag-list {
     list-style-type: none;
 }
@@ -17,4 +39,22 @@
 
 #tag-list li:nth-child(3n) {
     clear: both;
+}
+
+#language-box,
+#metrics-box,
+#new-metric-box {
+    border: 1px solid #cdcdcd;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+#add-metric-button {
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 4px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 4px;
+    background: -moz-linear-gradient(top, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
 }
