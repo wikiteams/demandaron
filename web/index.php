@@ -28,6 +28,20 @@ $app->get('/api/tags', function() use ($app) {
 $app->post('/api/tags', function(Request $request) use ($app) {
     $data = json_decode($request->getContent(), true);
 
+    $sql = "SELECT name FROM tags WHERE LOWER(name) = :name";
+    $stmt = $app['db']->prepare($sql);
+    $stmt->bindValue(':name', trim(mb_strtolower($data['name'])), PDO::PARAM_STR);
+    $stmt->execute();
+    $tag = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($tag) {
+        $response = array(
+            'status' => 'error',
+        );
+
+        return $app->json($response, 412);
+    }
+
     $sql = "INSERT INTO tags (name) VALUES(:name)";
     $stmt = $app['db']->prepare($sql);
     $stmt->bindValue(':name', $data['name'], PDO::PARAM_STR);
@@ -101,5 +115,5 @@ $app->post('/api/answers', function(Request $request) use ($app) {
     return $app->json($response);
 });
 
-//$app['debug'] = true;
+$app['debug'] = true;
 $app->run();
