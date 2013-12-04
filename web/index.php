@@ -17,6 +17,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 $app->get('/api/tags', function() use ($app) {
     $sql = "SELECT id, name, count(at.tag_id) as counter FROM tags t
             LEFT JOIN answers_tags at ON (t.id = at.tag_id)
+            WHERE is_deleted = 'false'
             GROUP BY name
             ORDER BY counter DESC, name ASC";
 
@@ -27,10 +28,11 @@ $app->get('/api/tags', function() use ($app) {
 
 $app->post('/api/tags', function(Request $request) use ($app) {
     $data = json_decode($request->getContent(), true);
+    $name = trim(strip_tags(mb_strtolower($data['name'])));
 
     $sql = "SELECT name FROM tags WHERE LOWER(name) = :name";
     $stmt = $app['db']->prepare($sql);
-    $stmt->bindValue(':name', trim(mb_strtolower($data['name'])), PDO::PARAM_STR);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
     $stmt->execute();
     $tag = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -42,9 +44,11 @@ $app->post('/api/tags', function(Request $request) use ($app) {
         return $app->json($response, 412);
     }
 
+    $name = trim(strip_tags($data['name']));
+
     $sql = "INSERT INTO tags (name) VALUES(:name)";
     $stmt = $app['db']->prepare($sql);
-    $stmt->bindValue(':name', $data['name'], PDO::PARAM_STR);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
 
     $result = $stmt->execute();
 
@@ -115,5 +119,5 @@ $app->post('/api/answers', function(Request $request) use ($app) {
     return $app->json($response);
 });
 
-$app['debug'] = true;
+//$app['debug'] = true;
 $app->run();
