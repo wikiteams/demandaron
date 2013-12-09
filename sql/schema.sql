@@ -1,3 +1,8 @@
+CREATE TABLE "jobs" (
+  "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,
+  "title" VARCHAR UNIQUE
+);
+
 CREATE TABLE "tags" (
   "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,
   "name" VARCHAR UNIQUE ,
@@ -13,6 +18,7 @@ CREATE  TABLE "main"."languages" (
 
 CREATE  TABLE "main"."answers" (
   "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,
+  "job_id" INTEGER NOT NULL ,
   "language_id" INTEGER NOT NULL ,
   "opinion" TEXT,
   "ip" VARCHAR NOT NULL,

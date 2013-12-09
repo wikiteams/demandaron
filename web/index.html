@@ -11,6 +11,10 @@
     <script src="assets/js/demandaron.js"></script>
 </head>
 <body>
+    <script type="text/template" id="job-template">
+        <%= title %>
+    </script>
+
     <script type="text/template" id="tag-template">
         <span>&#9744;</span> <%= name %>
     </script>
@@ -23,10 +27,17 @@
         <h1>Software Metrics Survey</h1>
         <h2>
             <p>
-               From the list below please select the language in which you are most fluent and metric/metrics which according to you are most reliable
+               From the lists below please select your job title, the language in which you are most fluent and metric/metrics which according to you are most reliable
                in assesing software quality.
             </p>
         </h2>
+
+        <div id="job-box">
+            <span class="error"></span>
+            <label for="language">Job Title:</label>
+            <select name="job" id="job"></select>
+        </div>
+
         <div id="language-box">
             <span class="error"></span>
             <label for="language">Language:</label>

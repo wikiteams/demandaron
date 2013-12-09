@@ -53,6 +53,21 @@ $(function() {
 
     window.Languages = new LanguageList;
 
+    var Job = Backbone.Model.extend({
+        defaults: {
+            title: ''
+        },
+        initialize: function() {
+        }
+    });
+
+    var JobsList = Backbone.Collection.extend({
+        model: Job,
+        url: "api/jobs"
+    });
+
+    window.Jobs = new JobsList;
+
     window.TagView = Backbone.View.extend({
         tagName: 'li',
         template: _.template($('#tag-template').html()),
@@ -101,6 +116,21 @@ $(function() {
         }
     });
 
+    window.JobView = Backbone.View.extend({
+        tagName: 'option',
+        template: _.template($('#job-template').html()),
+        initialize: function() {
+            _.bindAll(this, 'render');
+
+            this.model.bind('change', this.render);
+        },
+        render: function() {
+            this.$el.val(this.model.get('id'));
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
     window.AppView = Backbone.View.extend({
         el: $('#demandaron'),
 
@@ -110,7 +140,11 @@ $(function() {
         },
 
         initialize: function() {
-            _.bindAll(this, 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages', 'sendSurvey', 'saveTag');
+            _.bindAll(this, 'addOneJob', 'addAllJobs', 'renderJobs', 'addOneTag', 'addAllTags', 'renderTags', 'addOneLanguage', 'addAllLanguages', 'renderLanguages', 'sendSurvey', 'saveTag');
+
+            Jobs.bind('add', this.addOneJob);
+            Jobs.bind('reset', this.addAllJobs);
+            Jobs.bind('all', this.renderJobs);
 
             Tags.bind('add', this.addOneTag);
             Tags.bind('reset', this.addAllTags);
@@ -118,10 +152,23 @@ $(function() {
 
             Languages.bind('add', this.addOneLanguage);
             Languages.bind('reset', this.addAllLanguages);
-            Languages.bind('all', this.renderLanguage);
+            Languages.bind('all', this.renderLanguages);
 
+            Jobs.fetch();
             Tags.fetch();
             Languages.fetch();
+        },
+
+        addOneJob: function(job) {
+            var view = new JobView({model:job});
+            this.$('#job').append(view.render().el);
+        },
+
+        addAllJobs: function() {
+            Tags.each(this.addOneJob);
+        },
+
+        renderJobs: function() {
         },
 
         saveTag: function() {
@@ -161,11 +208,12 @@ $(function() {
         },
 
         sendSurvey: function() {
+            var jobId = $('#job').val();
             var languageId = $('#language').val();
             var choosedMetrics = $.map($('#tag-list li.selected'), function(element, index) { return $(element).attr('rel'); });
             var opinion = $('#opinion').val();
 
-            var answer = new Answer({'languageId': languageId, 'tagIds': choosedMetrics, 'opinion': opinion});
+            var answer = new Answer({'jobId': jobId, 'languageId': languageId, 'tagIds': choosedMetrics, 'opinion': opinion});
             answer.on('invalid', _.bind(function(model, error) {
                 this.$('.error').html('');
 

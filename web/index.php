@@ -68,6 +68,13 @@ $app->post('/api/tags', function(Request $request) use ($app) {
     return $app->json($response);
 });
 
+$app->get('/api/jobs', function() use ($app) {
+    $sql = "SELECT * from jobs ORDER BY title ASC";
+    $jobs = $app['db']->fetchAll($sql);
+
+    return $app->json($jobs);
+});
+
 $app->get('/api/languages', function() use ($app) {
     $sql = "SELECT * from languages ORDER BY name ASC";
     $tags = $app['db']->fetchAll($sql);
@@ -78,6 +85,7 @@ $app->get('/api/languages', function() use ($app) {
 $app->post('/api/answers', function(Request $request) use ($app) {
     $data = json_decode($request->getContent(), true);
 
+    $jobId = $data['jobId'];
     $languageId = $data['languageId'];
     $tagIds = $data['tagIds'];
     $opinion = $data['opinion'];
@@ -87,9 +95,10 @@ $app->post('/api/answers', function(Request $request) use ($app) {
         return  $app->json(array('status' => 'error'), 412);
     }
 
-    $sql = "INSERT INTO answers (language_id, opinion, ip) VALUES(:languageId, :opinion, :ip)";
+    $sql = "INSERT INTO answers (job_id, language_id, opinion, ip) VALUES(:jobId, :languageId, :opinion, :ip)";
     $stmt = $app['db']->prepare($sql);
 
+    $stmt->bindValue(':jobId', $jobId, PDO::PARAM_INT);
     $stmt->bindValue(':languageId', $languageId, PDO::PARAM_INT);
     $stmt->bindValue(':opinion', $opinion, PDO::PARAM_STR);
     $stmt->bindValue(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
